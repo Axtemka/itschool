@@ -1,151 +1,78 @@
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.Scanner;
 
+import static java.lang.Math.PI;
 import static java.lang.Math.round;
 
 public class Main {
     public static void main(String[] args) {
-        task7();
-    }
-
-    public static void task1() {
         Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int[] data = new int[n];
-        for(int i = 0; i < n; i++){
+        int size = sc.nextInt();
+        int[] data = new int[size];
+        for(int i = 0; i < size; i++){
             data[i] = sc.nextInt();
         }
-        int x = sc.nextInt();
-
-        for(int i = 0; i < n; i++){
-            if (data[i] == x) {
-                System.out.println(i+1);
-                break;
-            }
-            if (i == n-1 && data[i] != x) System.out.println("NO");
-        }
+        print_arr(minToBegin(data));
     }
-    public static void task2() {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int[] data = new int[n];
-        int sum = 0;
-        for(int i = 0; i < n; i++){
-            data[i] = sc.nextInt();
+    public static int sumOfDigits(int num){
+        int summ = 0;
+        while(num > 0){
+            summ += num % 10;
+            num = num / 10;
         }
-        boolean flag = true;
-        for(int i = 0; i < n; i++){
-            if (data[i] % 2 == 0) {
-                sum+= data[i];
-                flag = false;
-            }
-        }
-        if (flag) System.out.println("NO");
-        else System.out.println(sum);
+        return summ;
     }
 
-    public static void task3() {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int[] data = new int[n];
-        float avg = 0;
+    public static int sumOfSeven(int a, int b){
+        int summ = 0;
+        for(int i = a; i <= b; i++){
+            if (i % 7 == 0 && i > 9 && i < 100) summ += i % 10 + i / 10 % 10;
+        }
+        return summ;
+    }
+
+    public static int sumOfThirteen(int num){
         int count = 0;
-        for(int i = 0; i < n; i++){
-            data[i] = sc.nextInt();
+        for(int i = 0; i < num; i++){
+            if (sumOfDigits(i) % 13 == 0) count++;
         }
-        boolean flag = true;
-        for(int i = 0; i < n; i++){
-            if (data[i] % 2 != 0) {
-                avg+= data[i];
+        return count;
+    }
+
+    public static double avgOf4Digit(int[] arr){
+        double summ = 0;
+        int count = 0;
+        for (int j : arr) {
+            if (j > 999 && j < 10000) {
+                summ += j;
                 count++;
-                flag = false;
             }
         }
-        if (flag) System.out.println("NO");
-        else {
-            DecimalFormat decimalFormat = new DecimalFormat( "#.##" );
-            String result = decimalFormat.format(avg / count);
-            System.out.print(result);
-        }
+        if (count == 0) return -1;
+        return summ / count;
     }
-    public static void task4() {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int[] data = new int[n];
-        int a1 = 4;
-        for(int i = 0;i < n; i++){
-            data[i] = a1;
-            a1 += 3;
-        }
-        for(int i = 0;i < n; i++){
-            System.out.print(data[i] + " ");
-        }
-    }
-    public static void task5() {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int[] data = new int[n];
-        for(int i = 0; i < n; i++){
-            data[i] = sc.nextInt();
-        }
 
-        for(int i = 0; i < n/2; i++){
-            int tmp = data[i];
-            data[i] = data[n-1-i];
-            data[n-1-i] = tmp;
-        }
-
-        for(int i = 0; i < n; i++){
-            System.out.print(data[i] + " ");
-        }
-    }
-    public static void task6() {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int[][] data = new int[2][n];
-        for(int i = 0; i < n; i++){
-            data[0][i] = sc.nextInt();
-        }
-        for(int i = 0; i < n; i++){
-            for(int j = 0; j < n; j++){
-                if (data[0][i] == data[0][j]){
-                    data[1][i]++;
-                }
+    public static int[] minToBegin(int[] data){
+        int min = data[data.length-1];
+        int mini = data.length-1;
+        for(int i = data.length-1; i >= 0; i--){
+            if (data[i] <= min) {
+                min = data[i];
+                mini = i;
             }
         }
-        int maxi = 0;
-        for(int i = 0; i < n; i++){
-            if (data[1][i] > data[1][maxi]) maxi = i;
+        for(int i = mini; i > 0; i--){
+            int tmp = data[i-1];
+            data[i-1] = data[i];
+            data[i] = tmp;
         }
-        System.out.println(data[0][maxi]);
+        return data;
     }
-    public static void task7() {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int[] data = new int[n];
-
-        for(int i = 0; i < n; i++){
-            data[i] = sc.nextInt();
+    public static void print_arr(int[] data){
+        for(int i = 0; i < data.length; i++){
+            System.out.print(data[i]+" ");
         }
-
-        int[] tmp = new int[n];
-        int ind = 0;
-        for(int i = 0; i < n; i++){
-            if (data[i] < 0){
-                tmp[ind] = data[i];
-                ind++;
-            }
-        }
-        for(int i = 0; i < n; i++){
-            if (data[i] >= 0){
-                tmp[ind] = data[i];
-                ind++;
-            }
-        }
-
-        for(int i = 0; i < n; i++){
-            System.out.print(tmp[i] + " ");
-        }
-
     }
+
 }
