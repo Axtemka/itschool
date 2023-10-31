@@ -1,107 +1,222 @@
-import java.util.Locale;
-import java.util.Scanner;
+class Person{
+    private String name;
+    private int age;
 
-class Time {
-    int hour, min, sec;
-
-//    public Time(int min){
-//        this.hour = min / 60;
-//        this.min = min / 60;
-//    }
-    public Time(int sec){
-        hour = sec / 3600;
-        sec = sec % 3600;
-        min = sec / 60;
-        this.sec = sec % 60;
+    public Person(String name, int age){
+        setName(name);
+        setAge(age);
     }
+
+    public int getAge() {
+        return age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String toString(){
-        return hour + ":" + min + ":" + sec;
+        return "(" + name + ", " + age + ")";
+    }
+    public String work(){
+        return "None";
     }
 
 }
 
+class Employee extends Person{
 
-class Vector2D {
-    public double x;
-    public double y;
+    private String company;
 
-    static int count = 0;
-
-    public Vector2D(){
-        x = 1;
-        y = 1;
-        count++;
+    public void setCompany(String company) {
+        this.company = company;
     }
 
-    public Vector2D(double x, double y){
+    public String getCompany() {
+        return company;
+    }
+    public Employee(String name, int age, String company) {
+        super(name, age);
+        this.company = company;
+    }
+
+    @Override
+    public String toString() {
+        return "(" + super.getName() + ", " + super.getAge() + ", " + company + ")";
+    }
+
+    @Override
+    public String work() {
+        return "Manager";
+    }
+}
+
+//===========================================================
+
+
+interface Moveable{
+    void move(float dx, float dy);
+    void resize(float koeff);
+}
+
+
+class Figure{
+    private double x;
+    private double y;
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+    public Figure(double x, double y){
         this.x = x;
         this.y = y;
-        count++;
     }
 
-    public Vector2D(Vector2D v){
-        this.x = v.x;
-        this.y = v.y;
-        count++;
+    public double getArea() {
+        return 0;
     }
 
-    public void print(){
-        System.out.println("("+String.format(Locale.US, "%.2f", x)+", "+ String.format(Locale.US, "%.2f", y) +")");
-    }
-
-    public double length(){
-        return Math.sqrt(x*x + y*y);
-    }
-
-    public void add(Vector2D v){
-        this.x += v.x;
-        this.y += v.y;
-    }
-    public void sub(Vector2D v){
-        this.x -= v.x;
-        this.y -= v.y;
-    }
-
-    public void scale(double scaleFactor){
-        this.x *= scaleFactor;
-        this.y *= scaleFactor;
-    }
-
-    public void normalized(){
-
-        if (this.y < 0) this.y = -1.0;
-        else this.y = 1.0;
-
-        if (this.x < 0) this.x = -1.0;
-        else this.x = 1.0;
-    }
-
-    public double dotProduct(Vector2D v){
-        return v.x * this.x + v.y * this.y;
+    public double getPerimeter() {
+        return 0;
     }
 
 }
 
-public class Main {
-    static {
-        System.out.println("Test");
+class Rectangle extends Figure implements Moveable{
+    private float height;
+    private float width;
+
+    public Rectangle(double x, double y, float height, float width){
+        super(x, y);
+        setHeight(height);
+        setWidth(width);
     }
+
+    public void setHeight(float height) {
+        this.height = height;
+    }
+
+    public void setWidth(float width) {
+        this.width = width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    @Override
+    public double getArea() {
+        return width * height;
+    }
+    public double getPerimeter() {
+        return 2*(height + width);
+    }
+
+    @Override
+    public void move(float dx, float dy) {
+        super.setX(super.getX() + dx);
+        super.setY(super.getY() + dy);
+    }
+
+    @Override
+    public void resize(float koeff) {
+        setWidth(getWidth()*koeff);
+        setHeight(getHeight()*koeff);
+    }
+
+    public String toString(){
+        return "Rectangle\nCenter: ("+(getX()+getWidth()/2)+", "+(getY()+getHeight()/2)+")\nHeight: "+getHeight()+"\nWidth: "+getWidth();
+    }
+}
+
+class Circle extends Figure implements Moveable{
+    private float radius;
+
+    public Circle(double x, double y, float radius) {
+        super(x, y);
+        setRadius(radius);
+    }
+
+    @Override
+    public double getPerimeter() {
+        return 2*Math.PI*radius;
+    }
+
+    @Override
+    public double getArea() {
+        return Math.PI * radius*radius;
+    }
+
+    public void setRadius(float radius) {
+        this.radius = radius;
+    }
+
+    public float getRadius() {
+        return radius;
+    }
+
+    @Override
+    public void move(float dx, float dy) {
+        super.setX(super.getX()+dx);
+        super.setY(super.getY()+dy);
+    }
+
+
+    @Override
+    public void resize(float koeff) {
+        setRadius(getRadius()*koeff);
+    }
+
+    public String toString(){
+        return "Circle\nCenter: ("+getX()+", "+getY()+")\nRadius: "+getRadius();
+    }
+}
+
+//==============================================================================
+
+abstract class Animal {
+    public abstract String speak();
+}
+class Cat extends Animal{
+    @Override
+    public String speak() {
+        return "Meow";
+    }
+}
+
+//interface Animal{
+//    public String speak();
+//}
+public class Main {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        Vector2D vA = new Vector2D();
-        Vector2D vB = new Vector2D(5.0, 7.0);
-        Vector2D vC = new Vector2D(vB);
-        vA.add(vB);
-        vA.print();
-        vA.sub(vC);
-        vA.print();
-        System.out.println(vB.length());
-        vC.scale(1.5);
-        vC.print();
-        vC.normalized();
-        System.out.println(vC.length());
-        vC.scale(2);
-        System.out.println(vA.dotProduct(vB));
-        System.out.println(vA.count);
+        Circle circle = new Circle(10, 10, 1);
+        Rectangle rectangle = new Rectangle(10, 10, 1, 1);
+        System.out.println(circle);
+        System.out.println();
+        System.out.println(rectangle);
     }
 }
