@@ -1,78 +1,107 @@
-import java.text.DecimalFormat;
-import java.util.Arrays;
+import java.util.Locale;
 import java.util.Scanner;
 
-import static java.lang.Math.PI;
-import static java.lang.Math.round;
+class Time {
+    int hour, min, sec;
+
+//    public Time(int min){
+//        this.hour = min / 60;
+//        this.min = min / 60;
+//    }
+    public Time(int sec){
+        hour = sec / 3600;
+        sec = sec % 3600;
+        min = sec / 60;
+        this.sec = sec % 60;
+    }
+    public String toString(){
+        return hour + ":" + min + ":" + sec;
+    }
+
+}
+
+
+class Vector2D {
+    public double x;
+    public double y;
+
+    static int count = 0;
+
+    public Vector2D(){
+        x = 1;
+        y = 1;
+        count++;
+    }
+
+    public Vector2D(double x, double y){
+        this.x = x;
+        this.y = y;
+        count++;
+    }
+
+    public Vector2D(Vector2D v){
+        this.x = v.x;
+        this.y = v.y;
+        count++;
+    }
+
+    public void print(){
+        System.out.println("("+String.format(Locale.US, "%.2f", x)+", "+ String.format(Locale.US, "%.2f", y) +")");
+    }
+
+    public double length(){
+        return Math.sqrt(x*x + y*y);
+    }
+
+    public void add(Vector2D v){
+        this.x += v.x;
+        this.y += v.y;
+    }
+    public void sub(Vector2D v){
+        this.x -= v.x;
+        this.y -= v.y;
+    }
+
+    public void scale(double scaleFactor){
+        this.x *= scaleFactor;
+        this.y *= scaleFactor;
+    }
+
+    public void normalized(){
+
+        if (this.y < 0) this.y = -1.0;
+        else this.y = 1.0;
+
+        if (this.x < 0) this.x = -1.0;
+        else this.x = 1.0;
+    }
+
+    public double dotProduct(Vector2D v){
+        return v.x * this.x + v.y * this.y;
+    }
+
+}
 
 public class Main {
+    static {
+        System.out.println("Test");
+    }
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        int size = sc.nextInt();
-        int[] data = new int[size];
-        for(int i = 0; i < size; i++){
-            data[i] = sc.nextInt();
-        }
-        print_arr(minToBegin(data));
+        Vector2D vA = new Vector2D();
+        Vector2D vB = new Vector2D(5.0, 7.0);
+        Vector2D vC = new Vector2D(vB);
+        vA.add(vB);
+        vA.print();
+        vA.sub(vC);
+        vA.print();
+        System.out.println(vB.length());
+        vC.scale(1.5);
+        vC.print();
+        vC.normalized();
+        System.out.println(vC.length());
+        vC.scale(2);
+        System.out.println(vA.dotProduct(vB));
+        System.out.println(vA.count);
     }
-    public static int sumOfDigits(int num){
-        int summ = 0;
-        while(num > 0){
-            summ += num % 10;
-            num = num / 10;
-        }
-        return summ;
-    }
-
-    public static int sumOfSeven(int a, int b){
-        int summ = 0;
-        for(int i = a; i <= b; i++){
-            if (i % 7 == 0 && i > 9 && i < 100) summ += i % 10 + i / 10 % 10;
-        }
-        return summ;
-    }
-
-    public static int sumOfThirteen(int num){
-        int count = 0;
-        for(int i = 0; i < num; i++){
-            if (sumOfDigits(i) % 13 == 0) count++;
-        }
-        return count;
-    }
-
-    public static double avgOf4Digit(int[] arr){
-        double summ = 0;
-        int count = 0;
-        for (int j : arr) {
-            if (j > 999 && j < 10000) {
-                summ += j;
-                count++;
-            }
-        }
-        if (count == 0) return -1;
-        return summ / count;
-    }
-
-    public static int[] minToBegin(int[] data){
-        int min = data[data.length-1];
-        int mini = data.length-1;
-        for(int i = data.length-1; i >= 0; i--){
-            if (data[i] <= min) {
-                min = data[i];
-                mini = i;
-            }
-        }
-        for(int i = mini; i > 0; i--){
-            int tmp = data[i-1];
-            data[i-1] = data[i];
-            data[i] = tmp;
-        }
-        return data;
-    }
-    public static void print_arr(int[] data){
-        for(int i = 0; i < data.length; i++){
-            System.out.print(data[i]+" ");
-        }
-    }
-
 }
