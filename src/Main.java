@@ -1,222 +1,85 @@
-class Person{
+class Unit{
     private String name;
-    private int age;
-
-    public Person(String name, int age){
-        setName(name);
-        setAge(age);
-    }
-
-    public int getAge() {
-        return age;
-    }
+    private int health;
 
     public String getName() {
         return name;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public int getHealth() {
+        return health;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public String toString(){
-        return "(" + name + ", " + age + ")";
+    public void setHealth(int health) {
+        this.health = health;
     }
-    public String work(){
-        return "None";
+    public void printInfo(){
+        System.out.println("Name: "+getName()+"\nHealth: " + getHealth());
     }
-
-}
-
-class Employee extends Person{
-
-    private String company;
-
-    public void setCompany(String company) {
-        this.company = company;
+    public Unit(String name){
+        setName(name);
+        setHealth(100);
     }
-
-    public String getCompany() {
-        return company;
-    }
-    public Employee(String name, int age, String company) {
-        super(name, age);
-        this.company = company;
-    }
-
-    @Override
-    public String toString() {
-        return "(" + super.getName() + ", " + super.getAge() + ", " + company + ")";
-    }
-
-    @Override
-    public String work() {
-        return "Manager";
+    public Unit(Unit unit){
+        setName(unit.getName());
+        setHealth(unit.getHealth());
     }
 }
 
-//===========================================================
+class Mage extends Unit{
+    private int mana;
 
+    public int getMana() {
+        return mana;
+    }
 
-interface Moveable{
-    void move(float dx, float dy);
-    void resize(float koeff);
+    public void setMana(int mana) {
+        this.mana = mana;
+    }
+
+    public Mage(String name) {
+        super(name);
+        setMana(20);
+    }
+
+    public Mage(Mage mage){
+        super(mage);
+        setMana(mage.getMana());
+
+    }
+
+    @Override
+    public void printInfo() {
+        super.printInfo();
+        System.out.println("Mana: "+getMana());
+    }
 }
 
 
-class Figure{
-    private double x;
-    private double y;
-
-    public void setX(double x) {
-        this.x = x;
-    }
-
-    public void setY(double y) {
-        this.y = y;
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
-    }
-    public Figure(double x, double y){
-        this.x = x;
-        this.y = y;
-    }
-
-    public double getArea() {
-        return 0;
-    }
-
-    public double getPerimeter() {
-        return 0;
-    }
-
-}
-
-class Rectangle extends Figure implements Moveable{
-    private float height;
-    private float width;
-
-    public Rectangle(double x, double y, float height, float width){
-        super(x, y);
-        setHeight(height);
-        setWidth(width);
-    }
-
-    public void setHeight(float height) {
-        this.height = height;
-    }
-
-    public void setWidth(float width) {
-        this.width = width;
-    }
-
-    public float getHeight() {
-        return height;
-    }
-
-    public float getWidth() {
-        return width;
-    }
-
-    @Override
-    public double getArea() {
-        return width * height;
-    }
-    public double getPerimeter() {
-        return 2*(height + width);
-    }
-
-    @Override
-    public void move(float dx, float dy) {
-        super.setX(super.getX() + dx);
-        super.setY(super.getY() + dy);
-    }
-
-    @Override
-    public void resize(float koeff) {
-        setWidth(getWidth()*koeff);
-        setHeight(getHeight()*koeff);
-    }
-
-    public String toString(){
-        return "Rectangle\nCenter: ("+(getX()+getWidth()/2)+", "+(getY()+getHeight()/2)+")\nHeight: "+getHeight()+"\nWidth: "+getWidth();
-    }
-}
-
-class Circle extends Figure implements Moveable{
-    private float radius;
-
-    public Circle(double x, double y, float radius) {
-        super(x, y);
-        setRadius(radius);
-    }
-
-    @Override
-    public double getPerimeter() {
-        return 2*Math.PI*radius;
-    }
-
-    @Override
-    public double getArea() {
-        return Math.PI * radius*radius;
-    }
-
-    public void setRadius(float radius) {
-        this.radius = radius;
-    }
-
-    public float getRadius() {
-        return radius;
-    }
-
-    @Override
-    public void move(float dx, float dy) {
-        super.setX(super.getX()+dx);
-        super.setY(super.getY()+dy);
-    }
-
-
-    @Override
-    public void resize(float koeff) {
-        setRadius(getRadius()*koeff);
-    }
-
-    public String toString(){
-        return "Circle\nCenter: ("+getX()+", "+getY()+")\nRadius: "+getRadius();
-    }
-}
-
-//==============================================================================
-
-abstract class Animal {
-    public abstract String speak();
-}
-class Cat extends Animal{
-    @Override
-    public String speak() {
-        return "Meow";
-    }
-}
-
-//interface Animal{
-//    public String speak();
-//}
 public class Main {
     public static void main(String[] args) {
-        Circle circle = new Circle(10, 10, 1);
-        Rectangle rectangle = new Rectangle(10, 10, 1, 1);
-        System.out.println(circle);
+        System.out.println("//Создание обьекта Unit");
+        Unit unit = new Unit("Axtemka");
+        unit.printInfo();
         System.out.println();
-        System.out.println(rectangle);
+        System.out.println("//Создание обьекта Mage");
+        Mage mage = new Mage("Wizz");
+        mage.printInfo();
+        System.out.println();
+        System.out.println("//Создание еще одного обьекта Mage");
+        Mage mage2 = new Mage("ab");
+        mage2.printInfo();
+        System.out.println();
+        System.out.println("//Копирование unit");
+        Unit newu = new Unit(unit);
+        newu.printInfo();
+        System.out.println();
+        System.out.println("//Копирование mage");
+        Mage mage3 = new Mage(mage);
+        mage3.printInfo();
     }
 }
